@@ -10,3 +10,6 @@ phases:
   build:
     commands: 
         - echo Building stage has been started
+        - echo Building the Docker image...
+        - docker build -t $IMAGE_NAME .
+        - docker tag $IMAGE_NAME:latest $REPOSITORY_URI:latest
