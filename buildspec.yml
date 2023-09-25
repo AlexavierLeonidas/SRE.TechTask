@@ -1,15 +1,20 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands: 
-        - echo Pre_building stage has been started
-        - REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$IMAGE_NAME
-        - aws ecr get-login-password --region $DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com
-        - aws ecr describe-repositories --repository-names $IMAGE_NAME || aws ecr create-repository --repository-name $IMAGE_NAME
-  build:
-    commands: 
-        - echo Building stage has been started
-        - echo Building the Docker image...
-        - docker build -t $IMAGE_NAME .
-        - docker tag $IMAGE_NAME:latest $REPOSITORY_URI:latest
+    pre_build:
+        commands:
+            - echo Pre_building stage has been started
+            - REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$IMAGE_NAME
+            - aws ecr get-login-password --region $DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com
+            - aws ecr describe-repositories --repository-names $IMAGE_NAME || aws ecr create-repository --repository-name $IMAGE_NAME
+    build:
+        commands:
+            - echo Building stage has been started
+            - echo Building the Docker image...
+            - docker build -t $IMAGE_NAME .
+            - docker tag $IMAGE_NAME:latest $REPOSITORY_URI:latest
+    post_build:
+        commands:
+            - echo Build completed.
+            - echo Pushing the Docker image...
+            - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$IMAGE_NAME:latest
