@@ -1,0 +1,7 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands: echo Pre_building stage has been started
+  build:
+    commands: echo Building stage has been started
