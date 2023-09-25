@@ -20,3 +20,6 @@ phases:
             - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$IMAGE_NAME:latest
             - echo Updating ECS service...
             - aws ecs update-service --cluster TestCluster --service TechService --force-new-deployment
+            - echo '[{"name":"whoami","imageUri":"'$REPOSITORY_URI:latest'"}]' > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
